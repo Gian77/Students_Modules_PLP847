@@ -11,42 +11,26 @@ library(indicspecies)
 library(vegan)
 
 # create a phyloseq object ----------
-morel_otus <- read.delim("otu_table.txt",
-                         row.names=1) 
-head(morel_otus)
-dim(morel_otus)
-str(morel_otus)
+otus_ITS <- read.delim("otu_table_ITS_UPARSE.txt",row.names=1) 
+otus_phy_ITS <-otu_table(morel_otus,taxa_are_rows = TRUE)
+metadata_ITS <-read.delim("mapping_ITS_new.txt",row.names=1)
+metadata_phy_ITS <-sample_data(morel_metadata)
+taxonomy_ITS <-read.delim("consensus_taxonomy_ITS.txt", header=TRUE, row.names=1)
+taxonomy_phy_ITS <- tax_table(as.matrix(morel_taxonomy))
+otus_seq_ITS <- readDNAStringSet("otus_ITS.fasta", format="fasta", seek.first.rec=TRUE, use.names=TRUE)
 
-morel_otus_phy <-otu_table(morel_otus,
-                           taxa_are_rows = TRUE)
-morel_otus_phy
-str(morel_otus_phy)
+physeq_obj_ITS <- phyloseq(otus_phy_ITS,metadata_phy_ITS,taxonomy_phy_ITS,otus_seq_ITS)
+tax_table(physeq_obj_ITS)[tax_table(physeq_obj_ITS)==""]<- "NA"
 
-morel_metadata <-read.delim("mapping.txt",
-                            row.names=1)
-morel_metadata
-morel_metadata_phy <-sample_data(morel_metadata)
-morel_metadata_phy
 
-morel_taxonomy<-read.delim("consensus_taxonomy.txt",
-                           header=TRUE, 
-                           row.names=1)
-morel_taxonomy
+physeq_obj_ITS
+head(tax_table(physeq_obj_ITS))
+head(otu_table(physeq_obj_ITS))
+head(sample_data(physeq_obj_ITS))
 
-morel_taxonomy_phy <- tax_table(as.matrix(morel_taxonomy))
-morel_taxonomy_phy
-
-morel_otus_rep_seq <- readDNAStringSet("otus_rep.fasta", format="fasta", seek.first.rec=TRUE, use.names=TRUE)
-morel_otus_rep_seq
-
-physeq_object <- phyloseq(morel_otus_phy, 
-                          morel_metadata_phy, 
-                          morel_taxonomy_phy,
-                          morel_otus_rep_seq)
-physeq_object
-str(physeq_object)
 
 # filtering dataset --------------------
+tax_table(physeq_obj_ITS)[tax_table(physeq_obj_ITS)==""]<- "Unclassified"
 
 any(tax_table(physeq_object) == "Unclassified")
 any(tax_table(physeq_object) == "Protista")
