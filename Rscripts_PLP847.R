@@ -12,11 +12,11 @@ library(vegan)
 
 # create a phyloseq object ----------
 otus_ITS <- read.delim("otu_table_ITS_UPARSE.txt",row.names=1) 
-otus_phy_ITS <-otu_table(morel_otus,taxa_are_rows = TRUE)
+otus_phy_ITS <-otu_table(otus_ITS,taxa_are_rows = TRUE)
 metadata_ITS <-read.delim("mapping_ITS_new.txt",row.names=1)
-metadata_phy_ITS <-sample_data(morel_metadata)
+metadata_phy_ITS <-sample_data(metadata_ITS)
 taxonomy_ITS <-read.delim("consensus_taxonomy_ITS.txt", header=TRUE, row.names=1)
-taxonomy_phy_ITS <- tax_table(as.matrix(morel_taxonomy))
+taxonomy_phy_ITS <- tax_table(as.matrix(taxonomy_ITS))
 otus_seq_ITS <- readDNAStringSet("otus_ITS.fasta", format="fasta", seek.first.rec=TRUE, use.names=TRUE)
 
 physeq_obj_ITS <- phyloseq(otus_phy_ITS,metadata_phy_ITS,taxonomy_phy_ITS,otus_seq_ITS)
