@@ -22,12 +22,22 @@
 
 cd ${SLURM_SUBMIT_DIR}
 
+module load GCC/5.4.0-2.26  OpenMPI/1.10.3-CUDA
+module load seqtk
+
 mkdir stripped/
 
 conda activate cutadapt
 cutadapt -g CTTGGTCATTTAGAGGAAGTAA -e 0.01 --discard-untrimmed --match-read-wildcards no_phix/R1.nophix.fastq > stripped/stripped_R1.fastq
 cutadapt -g TCCTCCGCTTATTGATATGC -e 0.01 --discard-untrimmed --match-read-wildcards no_phix/R2.nophix.fastq > stripped/stripped_R2.fastq
 conda deactivate
+
+seqtk sample -s100 stripped/stripped_R1.fastq 500 > stripped/sub_stripped_R1.fastq
+seqtk seq -aQ64 stripped/sub_stripped_R1.fastq > stripped/sub_stripped_R1.fasta
+
+seqtk sample -s100 stripped/stripped_R2.fastq 500 > stripped/sub_stripped_R2.fastq
+seqtk seq -aQ64 stripped/sub_stripped_R2.fastq > stripped/sub_stripped_R2.fasta
+
 
 for fastq in stripped/*stripped*.fastq                                                                           
 do echo "$fastq : `grep -c "^+$" $fastq`" 
