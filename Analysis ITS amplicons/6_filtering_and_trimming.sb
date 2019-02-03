@@ -25,18 +25,14 @@ module load FastQC/0.11.7-Java-1.8.0_162
 
 mkdir filtered/
 
-/mnt/research/rdp/public/thirdParty/usearch10.0.240_i86linux64 -fastq_filter stripped/stripped_R1.fastq -fastq_maxee 1.0 -fastq_trunclen 244 -fastq_maxns 0 -fastaout filtered/filtered_R1.fasta -fastqout filtered/filtered_R1.fastq
-/mnt/research/rdp/public/thirdParty/usearch10.0.240_i86linux64 -fastq_filter filtered/filtered_R1.fastq -fastq_stripleft 44 -fastaout filtered/trimmed_R1.fasta -fastqout filtered/trimmed_R1.fastq
+/mnt/research/rdp/public/thirdParty/usearch11.0.667_i86linux64 -fastq_filter stripped/trimmed_R1.fastq -fastq_maxee 1.0 -fastq_trunclen 244 -fastq_maxns 0 -fastqout filtered/filtered_R1.fastq
+/mnt/research/rdp/public/thirdParty/usearch11.0.667_i86linux64 -fastq_filter stripped/trimmed_R2.fastq -fastq_maxee 1.0 -fastq_trunclen 200 -fastq_maxns 0 -fastqout filtered/filtered_R2.fastq
 
-
-/mnt/research/rdp/public/thirdParty/usearch10.0.240_i86linux64 -fastq_filter stripped/stripped_R2.fastq -fastq_maxee 1.0 -fastq_trunclen 244 -fastq_maxns 0 -fastaout filtered/filtered_R2.fasta -fastqout filtered/filtered_R2.fastq
-/mnt/research/rdp/public/thirdParty/usearch10.0.240_i86linux64 -fastq_filter filtered/filtered_R2.fastq -fastq_stripleft 44 -fastaout filtered/trimmed_R2.fasta -fastqout filtered/trimmed_R2.fastq
-
+fastqc ./filtered/filtered_R1.fastq
+fastqc ./filtered/filtered_R2.fastq
 
 for fasta in filtered/*trimmed*.fasta
 do echo "$fasta : `grep -c "^>" $fasta`"
 done > stats/reads_trimmed.counts
 
-fastqc ./filtered/trimmed_R1.fastq
-fastqc ./filtered/trimmed_R2.fastq
 
