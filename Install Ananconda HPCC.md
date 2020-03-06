@@ -56,3 +56,12 @@ or inside a job type
 
 # You are done. Enjoy your Biopython on HPCC @ MSU!
 
+If you want to add another tool/software to one of your environemnts,
+for eample, PEAR https://cme.h-its.org/exelixis/web/software/pear/
+an ultrafast, memory-efficient and highly accurate pair-end read merger,
+you can do the following:
+
+`conda install -c bioconda pear`
+
+Now. if you want to use PEAR, you just need to load the
+py2 conda environment.
